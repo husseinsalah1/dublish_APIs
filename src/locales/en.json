@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "notFound": "Not Found",
+    "invalidPassword": "Invalid Password",
+    "duplicate": "Duplicate",
+    "unauthorized": "Unauthorized",
+    "invalidToken": "Invalid Token",
+    "InvalidPermission": "Invalid Permission",
+    "referenceIdNotFound": "Reference Id Not Found",
+    "invalidReferenceId": "Invalid Reference Id",
+    "internalServerError": "Internal Server Error",
+    "validationFieldsError": "Validation Fields Error"
+  },
+  "validation": {
+    "string_base": "The {{field}} must be a string.",
+    "string_pattern_base": "The {{field}} contains invalid characters.",
+    "any_required": "The {{field}} is required.",
+    "string_email": "The email address is invalid.",
+    "string_empty": "The email address cannot be empty.",
+    "object_base": "The {{field}} must be an object with English and Arabic fields.",
+    "string_pattern_phone": "The phone number format is invalid.",
+    "any_only": "The {{field}} must be one of the predefined values."
+  }
+}
