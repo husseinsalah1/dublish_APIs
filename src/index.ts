@@ -7,6 +7,7 @@ import errorMiddleware from "./middleware/errorMiddleware";
 import rootRoutes from "./routes";
 import i18n from "./config/i18nConfig"; // Adjust the path to your i18nConfig file
 import localeMiddleware from "./middleware/localeMiddleware";
+import validateObjectId from "./middleware/validateObjectId";
 
 connection.connect();
 
@@ -24,7 +25,7 @@ app.use(i18n.init);
 app.use(localeMiddleware);
 
 // Routes
-app.use("/v1/api", rootRoutes);
+app.use("/v1/api", validateObjectId("_id"), rootRoutes);
 
 //Global Error handling middleware
 app.use(errorMiddleware);

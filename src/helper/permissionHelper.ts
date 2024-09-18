@@ -22,7 +22,7 @@ const roleEndPoints: EndpointSet = new Set([
 
 const permissionEndPoints: EndpointSet = new Set(["/admin/permissions/list"]);
 
-const permissions: PermissionsMap = new Map();
+export const permissions: PermissionsMap = new Map();
 
 permissions.set("admins", adminEndPoints);
 permissions.set("roles", roleEndPoints);

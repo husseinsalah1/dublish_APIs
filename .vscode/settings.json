@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["dublish"]
+  "cSpell.words": ["dublish"],
+  "prettier.useEditorConfig": false,
+  "prettier.printWidth": 500,
+  "graphql-config.load.configName": ""
 }

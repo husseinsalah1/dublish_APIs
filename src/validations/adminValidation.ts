@@ -66,5 +66,74 @@ const createAdminValidation = {
       }),
   }).required(),
 };
+const updateAdminValidation = {
+  body: Joi.object({
+    name: Joi.object({
+      en: Joi.string()
+        .pattern(allowedChars)
+        .optional() // Optional for updates
+        .messages({
+          "string.base": "The English name must be a string.",
+          "string.pattern.base": i18n.__("validation.string_pattern_base", {
+            field: "English name",
+          }),
+        }),
+      ar: Joi.string()
+        .pattern(allowedChars)
+        .optional() // Optional for updates
+        .messages({
+          "string.base": "The Arabic name must be a string.",
+          "string.pattern.base": "The Arabic name contains invalid characters.",
+        }),
+    })
+      .optional() // Optional for the entire name object
+      .messages({
+        "object.base":
+          "The name must be an object with English and Arabic fields.",
+      }),
 
-export { createAdminValidation };
+    username: Joi.string()
+      .pattern(allowedChars)
+      .optional() // Optional for updates
+      .messages({
+        "string.base": "The username must be a string.",
+        "string.pattern.base": "The username contains invalid characters.",
+      }),
+
+    password: Joi.string()
+      .pattern(allowedChars)
+      .optional() // Optional for updates
+      .messages({
+        "string.base": "The password must be a string.",
+        "string.pattern.base": "The password contains invalid characters.",
+      }),
+
+    email: Joi.string()
+      .email({ minDomainSegments: 2 })
+      .optional() // Optional for updates
+      .messages({
+        "string.email": "The email address is invalid.",
+        "string.empty": "The email address cannot be empty.",
+      }),
+
+    phone: Joi.string()
+      .pattern(/^\+?[1-9]\d{1,14}$/)
+      .optional() // Optional for updates
+      .messages({
+        "string.base": "The phone number must be a string.",
+        "string.pattern.base": "The phone number format is invalid.",
+      }),
+
+    role: Joi.string()
+      .valid(...Object.values(AdminRole))
+      .optional() // Optional for updates
+      .messages({
+        "string.base": "The role must be a string.",
+        "any.only": "The role must be one of the predefined values.",
+      }),
+  })
+    .required()
+    .unknown(false),
+};
+
+export { createAdminValidation, updateAdminValidation };

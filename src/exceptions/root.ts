@@ -20,6 +20,7 @@ export enum ErrorCodes {
   UNAUTHORIZED_ACCESS = 403,
   INVALID_PERMISSIONS = 405,
   INVALID_REFERENCE = 406,
+  INVALID_OBJECT_ID = 400,
 }
 
 export default HttpException;

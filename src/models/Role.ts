@@ -22,7 +22,6 @@ const roleSchema: Schema<IRole> = new Schema({
 roleSchema.methods.toJSON = function () {
   const role = this;
   const roleObject = role.toObject();
-
   return roleObject;
 };
 const roleModel = model<IRole>("roles", roleSchema);

@@ -3,7 +3,7 @@ interface MultiLangName {
   en: string;
   ar: string;
 }
-interface ICourse extends Document {
+export interface ICourse extends Document {
   name: MultiLangName;
   description: MultiLangName;
   about: MultiLangName[];
@@ -73,8 +73,9 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse>({
       },
     },
   },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  createdBy: { type: Schema.Types.ObjectId, ref: "admins", required: true },
   creationDate: { type: Date, default: Date.now },
 });
 
-export const courseModel = model<ICourse>("courses", CourseSchema);
+const courseModel = model<ICourse>("Course", CourseSchema);
+export default courseModel;

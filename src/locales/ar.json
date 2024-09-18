@@ -9,7 +9,8 @@
     "referenceIdNotFound": "معرف المرجع غير موجود",
     "invalidReferenceId": "معرف المرجع غير صحيح",
     "internalServerError": "خطأ داخلي في الخادم",
-    "validationFieldsError": "خطأ في الحقول المدخلة"
+    "validationFieldsError": "خطأ في الحقول المدخلة",
+    "invalidObjectId": "معرف الكائن غير صحيح"
   },
   "validation": {
     "string_base": "{{field}} يجب أن يكون نصًا.",
@@ -20,5 +21,8 @@
     "object_base": "{{field}} يجب أن يكون كائنًا يحتوي على الحقول الإنجليزية والعربية.",
     "string_pattern_phone": "تنسيق رقم الهاتف غير صالح.",
     "any_only": "{{field}} يجب أن يكون واحدًا من القيم المحددة مسبقًا."
+  },
+  "messages": {
+    "deleted": "تم الحذف بنجاح"
   }
 }

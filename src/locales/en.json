@@ -9,7 +9,8 @@
     "referenceIdNotFound": "Reference Id Not Found",
     "invalidReferenceId": "Invalid Reference Id",
     "internalServerError": "Internal Server Error",
-    "validationFieldsError": "Validation Fields Error"
+    "validationFieldsError": "Validation Fields Error",
+    "invalidObjectId": "Invalid Object Id"
   },
   "validation": {
     "string_base": "The {{field}} must be a string.",
@@ -20,5 +21,8 @@
     "object_base": "The {{field}} must be an object with English and Arabic fields.",
     "string_pattern_phone": "The phone number format is invalid.",
     "any_only": "The {{field}} must be one of the predefined values."
+  },
+  "messages": {
+    "deleted": "Deleted Successfully"
   }
 }

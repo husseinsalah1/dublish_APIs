@@ -1,13 +1,15 @@
-import {
-  FilterQuery,
-  Document,
-  Model,
-  QueryOptions,
-  ProjectionType,
-} from "mongoose";
-
+import { Model, Document, FilterQuery, UpdateQuery, SortOrder } from "mongoose";
+export interface FindAllOptions {
+  selectionObject?:
+    | string
+    | string[]
+    | Record<string, number | boolean | object>; // The fields to select
+  sortObject?: object; // The sort criteria
+  pageNumber?: number; // The page number for pagination
+  limitNumber?: number; // The limit of documents per page
+}
 class BaseRepository<T extends Document> {
-  protected model: Model<T>;
+  private model: Model<T>;
 
   constructor(model: Model<T>) {
     this.model = model;
@@ -18,24 +20,52 @@ class BaseRepository<T extends Document> {
     return newData.save();
   }
 
-  async findOne(query: FilterQuery<T>, populateField: string = "") {
-    return this.model.findOne(query).populate(populateField).exec();
+  async findOne(findObject: FilterQuery<T>): Promise<T | null> {
+    return this.model.findOne(findObject).exec();
   }
 
-  async findAll(
-    query: FilterQuery<T>,
-    projection?: ProjectionType<T> | null,
-    options?: QueryOptions,
-    populateField: string = ""
-  ): Promise<T[]> {
+  async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}) {
+    const {
+      selectionObject = {},
+      sortObject = {},
+      pageNumber = 1,
+      limitNumber = 10,
+    } = options;
+
+    const results = await this.model
+      .find(findObject)
+      .lean()
+      .sort(
+        sortObject as
+          | string
+          | { [key: string]: SortOrder | { $meta: any } }
+          | [string, SortOrder][]
+          | null
+          | undefined
+      )
+      .select(selectionObject)
+      .limit(limitNumber)
+      .skip((pageNumber - 1) * limitNumber);
+
+    return results;
+  }
+
+  async update(
+    findObject: FilterQuery<T>,
+    updatedData: UpdateQuery<T>
+  ): Promise<T | null> {
     return this.model
-      .find(query, projection, options)
-      .populate(populateField)
+      .findOneAndUpdate(findObject, updatedData, { new: true })
       .exec();
   }
 
-  async delete(id: string): Promise<{ deletedCount?: number }> {
-    return this.model.deleteOne({ _id: id }).exec();
+  async delete(findObject: FilterQuery<T>): Promise<boolean> {
+    const result = await this.model.deleteOne(findObject).exec();
+    return result.deletedCount === 1;
+  }
+
+  async save(data: T): Promise<T> {
+    return data.save();
   }
 }
 

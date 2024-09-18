@@ -4,21 +4,34 @@ import AdminController from "./../../controllers/AdminController";
 import roleModel from "../../models/Role";
 import checkReference from "../../middleware/checkReference";
 import validationSchema from "../../middleware/validationSchema";
-import localeMiddleware from "../../middleware/localeMiddleware";
-import i18n from "../../config/i18nConfig";
-import { createAdminValidation } from "../../validations/adminValidation";
+import {
+  createAdminValidation,
+  updateAdminValidation,
+} from "../../validations/adminValidation";
+import AdminService from "../../services/AdminService";
+import AdminRepository from "../../repositories/AdminRepository";
 
 const router = express.Router();
 
-const adminController = new AdminController();
-
+const adminService = new AdminService(new AdminRepository());
+const adminController = new AdminController(adminService);
 router.post(
   "/create",
-  checkReference(roleModel, "permissions"),
-  validationSchema(createAdminValidation),
+  [
+    validationSchema(createAdminValidation),
+    checkReference(roleModel, "permissions"),
+  ],
   customErrorHandler(adminController.createAdmin)
 );
 
-router.get("/list", customErrorHandler(adminController.getAdmins));
-router.get("/get", customErrorHandler(adminController.getAdmin));
+router.get("/get", customErrorHandler(adminController.findOne));
+router.get("/list", customErrorHandler(adminController.findAll));
+router.put(
+  "/update",
+  [validationSchema(updateAdminValidation)],
+  customErrorHandler(adminController.updateAdmin)
+);
+
+router.delete("/delete", customErrorHandler(adminController.delete));
+
 export default router;
