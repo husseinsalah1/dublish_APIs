@@ -33,31 +33,20 @@ const authMiddleware = (roles: string[]) => {
   return async (req: CustomRequest, res: Response, next: NextFunction) => {
     const token = extractToken(req.headers["authorization"]);
     if (!token) {
-      return next(
-        new UnauthorizedException(
-          i18n.__("errors.unauthorized"),
-          ErrorCodes.UNAUTHORIZED_ACCESS
-        )
-      );
+      console.log("No token found");
+
+      return next(new UnauthorizedException(i18n.__("errors.unauthorized"), ErrorCodes.UNAUTHORIZED_ACCESS));
     }
 
     const tokenData = verifyToken(token);
     if (!tokenData) {
-      return next(
-        new UnauthorizedException(
-          i18n.__("errors.invalidToken"),
-          ErrorCodes.UNAUTHORIZED_ACCESS
-        )
-      );
+      console.log("Invalid token");
+      return next(new UnauthorizedException(i18n.__("errors.invalidToken"), ErrorCodes.UNAUTHORIZED_ACCESS));
     }
 
     if (!roles.includes(tokenData.role ?? "")) {
-      return next(
-        new UnauthorizedException(
-          i18n.__("errors.unauthorized"),
-          ErrorCodes.UNAUTHORIZED_ACCESS
-        )
-      );
+      console.log("Invalid role");
+      return next(new UnauthorizedException(i18n.__("errors.unauthorized"), ErrorCodes.UNAUTHORIZED_ACCESS));
     }
 
     req.tokenData = tokenData;
@@ -65,21 +54,12 @@ const authMiddleware = (roles: string[]) => {
   };
 };
 
-export const verifyPermissions = (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const verifyPermissions = (req: CustomRequest, res: Response, next: NextFunction) => {
   if (req.tokenData?.role === "superAdmin") {
     return next();
   }
   if (!req.tokenData) {
-    return next(
-      new UnauthorizedException(
-        i18n.__("errors.unauthorized"),
-        ErrorCodes.UNAUTHORIZED_ACCESS
-      )
-    );
+    return next(new UnauthorizedException(i18n.__("errors.unauthorized"), ErrorCodes.UNAUTHORIZED_ACCESS));
   }
   try {
     let requesterId = req.query._id || req.body._id;
@@ -89,11 +69,7 @@ export const verifyPermissions = (
     const adminPermissions = req.tokenData.permissions.permissions;
 
     let isFound = false;
-    if (
-      allowedEndPoints.includes(endPoint as string) &&
-      req.tokenData._id == requesterId
-    )
-      return next();
+    if (allowedEndPoints.includes(endPoint as string) && req.tokenData._id == requesterId) return next();
 
     for (let key in adminPermissions) {
       if (adminPermissions[key].includes(endPoint)) {
@@ -114,12 +90,7 @@ export const verifyPermissions = (
       code: 403,
     });
   } catch (error) {
-    return next(
-      new UnauthorizedException(
-        i18n.__("errors.unauthorized"),
-        ErrorCodes.UNAUTHORIZED_ACCESS
-      )
-    );
+    return next(new UnauthorizedException(i18n.__("errors.unauthorized"), ErrorCodes.UNAUTHORIZED_ACCESS));
   }
 };
 

@@ -8,6 +8,7 @@ import rootRoutes from "./routes";
 import i18n from "./config/i18nConfig"; // Adjust the path to your i18nConfig file
 import localeMiddleware from "./middleware/localeMiddleware";
 import validateObjectId from "./middleware/validateObjectId";
+import corsMiddleware from "./config/cors";
 
 connection.connect();
 
@@ -16,6 +17,7 @@ const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
+app.use(corsMiddleware);
 app.use(express.json());
 app.use(morgan("dev"));
 
