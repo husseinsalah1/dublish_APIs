@@ -13,15 +13,9 @@ abstract class BaseController<T extends Document> {
   }
 
   findAll = async (req: Request, res: Response) => {
-    const findObject = req.query.findObject
-      ? JSON.parse(req.query.findObject as string)
-      : {};
-    const selectionObject = req.query.selectionObject
-      ? JSON.parse(req.query.selectionObject as string)
-      : {};
-    const sortObject = req.query.sortObject
-      ? JSON.parse(req.query.sortObject as string)
-      : {};
+    const findObject = req.query.findObject ? JSON.parse(req.query.findObject as string) : {};
+    const selectionObject = req.query.selectionObject ? JSON.parse(req.query.selectionObject as string) : {};
+    const sortObject = req.query.sortObject ? JSON.parse(req.query.sortObject as string) : {};
     const pageNumber = parseInt(req.query.page as string, 10) || 1;
     const limitNumber = parseInt(req.query.limit as string, 10) || 10;
     const options = {
@@ -31,15 +25,14 @@ abstract class BaseController<T extends Document> {
       limitNumber,
     };
     const result = (await this.service.findAll(findObject, options)) as any;
+
     return res.status(result.code).json(result);
   };
 
   findOne = async (req: Request, res: Response, next: NextFunction) => {
     const result = (await this.service.findOne({ _id: req.query._id })) as any;
     if (!result) {
-      return next(
-        new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND)
-      );
+      return next(new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND));
     }
     return res.status(result.code).json(result);
   };
@@ -64,9 +57,7 @@ abstract class BaseController<T extends Document> {
   delete = async (req: Request, res: Response, next: NextFunction) => {
     const result = (await this.service.delete(req.query._id as string)) as any;
     if (!result) {
-      return next(
-        new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND)
-      );
+      return next(new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND));
     }
     return res.status(result.code).json(result);
   };

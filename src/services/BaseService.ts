@@ -16,10 +16,11 @@ class BaseService<T extends Document> {
 
   async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}) {
     const resultArray = await this.repository.findAll(findObject, options);
+    const count = await this.repository.count(findObject);
     return {
       success: true,
       code: 200,
-      count: resultArray.length,
+      count: count,
       result: resultArray,
     };
   }
@@ -54,6 +55,10 @@ class BaseService<T extends Document> {
   async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
     const isMatch = await bcrypt.compare(password, hashedPassword);
     return isMatch;
+  }
+
+  async count(findObject: FilterQuery<T>) {
+    return this.repository.count(findObject);
   }
 }
 
