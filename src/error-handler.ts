@@ -15,7 +15,7 @@ const customErrorHandler = (method: Function) => {
       } else if (error instanceof ZodError) {
         exception = new UnprocessableEntityException("Unprocessable Entity", error?.issues, ErrorCodes.UNPROCESSABLE_ENTITY);
       } else {
-        exception = new InternalException("Internal Server Error", error.message, ErrorCodes.INTERNAL_EXCEPTION);
+        exception = new InternalException("Internal Server Error", error?.message, ErrorCodes.INTERNAL_EXCEPTION);
       }
 
       next(exception);

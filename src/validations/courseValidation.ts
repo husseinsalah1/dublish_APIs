@@ -9,8 +9,7 @@ const createCourseValidation = {
       en: Joi.string().pattern(allowedChars).required().messages({
         "string.empty": "English course name is required",
         "any.required": "English course name is required",
-        "string.pattern.base":
-          "English course name contains invalid characters",
+        "string.pattern.base": "English course name contains invalid characters",
       }),
       ar: Joi.string().pattern(allowedChars).required().messages({
         "string.empty": "Arabic course name is required",
@@ -28,14 +27,12 @@ const createCourseValidation = {
       en: Joi.string().pattern(allowedChars).required().messages({
         "string.empty": "English course description is required",
         "any.required": "English course description is required",
-        "string.pattern.base":
-          "English course description contains invalid characters",
+        "string.pattern.base": "English course description contains invalid characters",
       }),
       ar: Joi.string().pattern(allowedChars).required().messages({
         "string.empty": "Arabic course description is required",
         "any.required": "Arabic course description is required",
-        "string.pattern.base":
-          "Arabic course description contains invalid characters",
+        "string.pattern.base": "Arabic course description contains invalid characters",
       }),
     })
       .required()
@@ -44,27 +41,33 @@ const createCourseValidation = {
         "object.base": "Course description must be an object",
       }),
 
-    about: Joi.array()
-      .items(
-        Joi.object({
-          en: Joi.string().pattern(allowedChars).required().messages({
-            "string.empty": "English about section is required",
-            "any.required": "English about section is required",
-            "string.pattern.base":
-              "English about section contains invalid characters",
-          }),
-          ar: Joi.string().pattern(allowedChars).required().messages({
-            "string.empty": "Arabic about section is required",
-            "any.required": "Arabic about section is required",
-            "string.pattern.base":
-              "Arabic about section contains invalid characters",
-          }),
-        })
-      )
-      .required()
+    about: Joi.object({
+      en: Joi.array()
+        .items(
+          Joi.string().pattern(allowedChars).messages({
+            "string.empty": "English about section cannot be empty",
+            "string.pattern.base": "English about section contains invalid characters",
+          })
+        )
+        .optional()
+        .messages({
+          "array.base": "English about section must be an array",
+        }),
+      ar: Joi.array()
+        .items(
+          Joi.string().pattern(allowedChars).messages({
+            "string.empty": "Arabic about section cannot be empty",
+            "string.pattern.base": "Arabic about section contains invalid characters",
+          })
+        )
+        .optional()
+        .messages({
+          "array.base": "Arabic about section must be an array",
+        }),
+    })
+      .optional()
       .messages({
-        "array.base": "About section must be an array",
-        "any.required": "About section is required",
+        "object.base": "About section must be an object",
       }),
 
     image: Joi.object().optional().messages({
@@ -117,7 +120,7 @@ const createCourseValidation = {
       "any.required": "Number of classes is required",
     }),
 
-    attends: Joi.number().required().messages({
+    attends: Joi.number().optional().default(0).messages({
       "number.base": "Attendees number must be a number",
       "any.required": "Number of attendees is required",
     }),
@@ -180,8 +183,7 @@ const updateCourseValidation = {
     name: Joi.object({
       en: Joi.string().pattern(allowedChars).optional().messages({
         "string.empty": "English course name cannot be empty",
-        "string.pattern.base":
-          "English course name contains invalid characters",
+        "string.pattern.base": "English course name contains invalid characters",
       }),
       ar: Joi.string().pattern(allowedChars).optional().messages({
         "string.empty": "Arabic course name cannot be empty",
@@ -196,13 +198,11 @@ const updateCourseValidation = {
     description: Joi.object({
       en: Joi.string().pattern(allowedChars).optional().messages({
         "string.empty": "English course description cannot be empty",
-        "string.pattern.base":
-          "English course description contains invalid characters",
+        "string.pattern.base": "English course description contains invalid characters",
       }),
       ar: Joi.string().pattern(allowedChars).optional().messages({
         "string.empty": "Arabic course description cannot be empty",
-        "string.pattern.base":
-          "Arabic course description contains invalid characters",
+        "string.pattern.base": "Arabic course description contains invalid characters",
       }),
     })
       .optional()
@@ -210,24 +210,33 @@ const updateCourseValidation = {
         "object.base": "Course description must be an object",
       }),
 
-    about: Joi.array()
-      .items(
-        Joi.object({
-          en: Joi.string().pattern(allowedChars).optional().messages({
+    about: Joi.object({
+      en: Joi.array()
+        .items(
+          Joi.string().pattern(allowedChars).messages({
             "string.empty": "English about section cannot be empty",
-            "string.pattern.base":
-              "English about section contains invalid characters",
-          }),
-          ar: Joi.string().pattern(allowedChars).optional().messages({
+            "string.pattern.base": "English about section contains invalid characters",
+          })
+        )
+        .optional()
+        .messages({
+          "array.base": "English about section must be an array",
+        }),
+      ar: Joi.array()
+        .items(
+          Joi.string().pattern(allowedChars).messages({
             "string.empty": "Arabic about section cannot be empty",
-            "string.pattern.base":
-              "Arabic about section contains invalid characters",
-          }),
-        })
-      )
+            "string.pattern.base": "Arabic about section contains invalid characters",
+          })
+        )
+        .optional()
+        .messages({
+          "array.base": "Arabic about section must be an array",
+        }),
+    })
       .optional()
       .messages({
-        "array.base": "About section must be an array",
+        "object.base": "About section must be an object",
       }),
 
     image: Joi.object().optional().messages({

@@ -6,7 +6,10 @@ interface MultiLangName {
 export interface ICourse extends Document {
   name: MultiLangName;
   description: MultiLangName;
-  about: MultiLangName[];
+  about: {
+    en: string[];
+    ar: string[];
+  };
   image: Object;
   category: MultiLangName;
   hours: number;
@@ -30,12 +33,11 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse>({
     en: { type: String, required: true },
     ar: { type: String, required: true },
   },
-  about: [
-    {
-      en: { type: String, required: true },
-      ar: { type: String, required: true },
-    },
-  ],
+  about: {
+    en: [{ type: String, required: true }],
+    ar: [{ type: String, required: true }],
+  },
+
   image: { type: Object },
   category: {
     en: { type: String, required: true },
@@ -50,7 +52,7 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse>({
     ar: { type: String, required: true },
   },
   classes: { type: Number, required: true },
-  attends: { type: Number, required: true },
+  attends: { type: Number, required: true, default: 0 },
   price: { type: Number, required: true },
   isHasOffer: { type: Boolean, required: true },
   offerPercentage: {

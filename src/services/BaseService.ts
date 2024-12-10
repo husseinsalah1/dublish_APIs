@@ -17,6 +17,7 @@ class BaseService<T extends Document> {
   async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}) {
     const resultArray = await this.repository.findAll(findObject, options);
     const count = await this.repository.count(findObject);
+    console.log(count);
     return {
       success: true,
       code: 200,

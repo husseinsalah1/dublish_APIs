@@ -1,17 +1,15 @@
 {
-  "errors": {
-    "notFound": "Not Found",
-    "invalidPassword": "Invalid Password",
-    "duplicate": "Duplicate",
-    "unauthorized": "Unauthorized",
-    "invalidToken": "Invalid Token",
-    "InvalidPermission": "Invalid Permission",
-    "referenceIdNotFound": "Reference Id Not Found",
-    "invalidReferenceId": "Invalid Reference Id",
-    "internalServerError": "Internal Server Error",
-    "validationFieldsError": "Validation Fields Error",
-    "invalidObjectId": "Invalid Object Id"
-  },
+  "notFound": "Not Found",
+  "invalidPassword": "Invalid Password",
+  "duplicate": "Duplicate",
+  "unauthorized": "Unauthorized",
+  "invalidToken": "Invalid Token",
+  "InvalidPermission": "Invalid Permission",
+  "referenceIdNotFound": "Reference Id Not Found",
+  "invalidReferenceId": "Invalid Reference Id",
+  "internalServerError": "Internal Server Error",
+  "validationFieldsError": "Validation Fields Error",
+  "invalidObjectId": "Invalid Object Id",
   "validation": {
     "string_base": "The {{field}} must be a string.",
     "string_pattern_base": "The {{field}} contains invalid characters.",

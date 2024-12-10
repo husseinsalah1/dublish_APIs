@@ -4,10 +4,7 @@ import { NotFoundException } from "../exceptions/not-found-exception";
 import { ErrorCodes } from "../exceptions/root";
 import { IRole } from "../models/Role";
 import RoleRepository from "../repositories/RoleRepository";
-import {
-  convertFieldsToLowerCase,
-  FormObject,
-} from "../utils/custom-functions";
+import { convertFieldsToLowerCase, FormObject } from "../utils/custom-functions";
 import BaseService from "./BaseService";
 
 class RoleService extends BaseService<IRole> {
@@ -26,10 +23,7 @@ class RoleService extends BaseService<IRole> {
     const existingRole = await this.findByName(`name.en`, name[locale]);
 
     if (existingRole) {
-      throw new BadRequestException(
-        i18n.__("errors.duplicate"),
-        ErrorCodes.DUPLICATE
-      );
+      throw new BadRequestException(i18n.__(" duplicate"), ErrorCodes.DUPLICATE);
     }
     data = convertFieldsToLowerCase(data as FormObject, ["name.en"]);
     const createOperation = await this.create(data);
@@ -48,10 +42,7 @@ class RoleService extends BaseService<IRole> {
 
     const updateOperation = await this.update(_id, data);
     if (!updateOperation) {
-      throw new NotFoundException(
-        i18n.__("errors.notFound"),
-        ErrorCodes.NOT_FOUND
-      );
+      throw new NotFoundException(i18n.__(" notFound"), ErrorCodes.NOT_FOUND);
     }
     return {
       success: true,

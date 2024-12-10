@@ -25,8 +25,7 @@ const createAdminValidation = {
     })
       .required()
       .messages({
-        "object.base":
-          "The name must be an object with English and Arabic fields.",
+        "object.base": "The name must be an object with English and Arabic fields.",
       }),
 
     username: Joi.string().pattern(allowedChars).required().messages({
@@ -48,7 +47,7 @@ const createAdminValidation = {
     }),
 
     phone: Joi.string()
-      .pattern(/^\+?[1-9]\d{1,14}$/)
+      .pattern(/^\+?[0-9]\d{1,14}$/)
       .required()
       .messages({
         "string.base": "The phone number must be a string.",
@@ -88,8 +87,7 @@ const updateAdminValidation = {
     })
       .optional() // Optional for the entire name object
       .messages({
-        "object.base":
-          "The name must be an object with English and Arabic fields.",
+        "object.base": "The name must be an object with English and Arabic fields.",
       }),
 
     username: Joi.string()

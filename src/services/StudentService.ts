@@ -23,7 +23,7 @@ class StudentService extends BaseService<IStudent> {
     const existingStudent = await this.findStudentByEmail(data.email as string);
 
     if (existingStudent) {
-      throw new BadRequestException(i18n.__("errors.duplicate"), ErrorCodes.DUPLICATE);
+      throw new BadRequestException(i18n.__(" duplicate"), ErrorCodes.DUPLICATE);
     }
 
     const createOperation = await this.create(data);
@@ -37,11 +37,11 @@ class StudentService extends BaseService<IStudent> {
   async login(email: string, password: string, locale: string) {
     const student = await this.findStudentByEmail(email);
     if (!student) {
-      throw new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND);
+      throw new NotFoundException(i18n.__(" notFound"), ErrorCodes.NOT_FOUND);
     }
     const isMatch = await this.comparePassword(password, student.password);
     if (!isMatch) {
-      throw new NotFoundException(i18n.__("errors.invalidPassword"), ErrorCodes.INVALID_PASSWORD);
+      throw new NotFoundException(i18n.__(" invalidPassword"), ErrorCodes.INVALID_PASSWORD);
     }
 
     const token = await student.generateAuthToken();
@@ -61,7 +61,7 @@ class StudentService extends BaseService<IStudent> {
 
     const existingStudent = await this.findStudentByEmail(data.email as string);
     if (existingStudent) {
-      throw new BadRequestException(i18n.__("errors.duplicate"), ErrorCodes.DUPLICATE);
+      throw new BadRequestException(i18n.__(" duplicate"), ErrorCodes.DUPLICATE);
     }
 
     const createOperation = await this.create(data);
@@ -78,7 +78,7 @@ class StudentService extends BaseService<IStudent> {
     if (email) {
       const existingStudent = await this.findStudentByEmail(email);
       if (existingStudent && existingStudent._id !== _id) {
-        throw new BadRequestException(i18n.__("errors.duplicate"), ErrorCodes.DUPLICATE);
+        throw new BadRequestException(i18n.__(" duplicate"), ErrorCodes.DUPLICATE);
       }
     }
 

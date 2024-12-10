@@ -32,25 +32,12 @@ const validationSchema = (schema: { [key: string]: Joi.ObjectSchema }) => {
           );
         }
       }
-
       if (validationErrors.length) {
-        return next(
-          new UnprocessableEntityException(
-            i18n.__("errors.validationFieldsError"),
-            validationErrors,
-            ErrorCodes.UNPROCESSABLE_ENTITY
-          )
-        );
+        return next(new UnprocessableEntityException(i18n.__("errors.validationFieldsError"), validationErrors, ErrorCodes.UNPROCESSABLE_ENTITY));
       }
       return next();
     } catch (err: any) {
-      return next(
-        new InternalException(
-          i18n.__("errors.internalServerError"),
-          err.message,
-          ErrorCodes.INTERNAL_EXCEPTION
-        )
-      );
+      return next(new InternalException(i18n.__("errors.internalServerError"), err.message, ErrorCodes.INTERNAL_EXCEPTION));
     }
   };
 };

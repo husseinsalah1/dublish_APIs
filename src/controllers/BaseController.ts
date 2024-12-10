@@ -32,7 +32,7 @@ abstract class BaseController<T extends Document> {
   findOne = async (req: Request, res: Response, next: NextFunction) => {
     const result = (await this.service.findOne({ _id: req.query._id })) as any;
     if (!result) {
-      return next(new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND));
+      return next(new NotFoundException(i18n.__("notFound"), ErrorCodes.NOT_FOUND));
     }
     return res.status(result.code).json(result);
   };
@@ -57,7 +57,7 @@ abstract class BaseController<T extends Document> {
   delete = async (req: Request, res: Response, next: NextFunction) => {
     const result = (await this.service.delete(req.query._id as string)) as any;
     if (!result) {
-      return next(new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND));
+      return next(new NotFoundException(i18n.__(" notFound"), ErrorCodes.NOT_FOUND));
     }
     return res.status(result.code).json(result);
   };

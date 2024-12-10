@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 dotenv.config();
@@ -9,6 +9,9 @@ import i18n from "./config/i18nConfig"; // Adjust the path to your i18nConfig fi
 import localeMiddleware from "./middleware/localeMiddleware";
 import validateObjectId from "./middleware/validateObjectId";
 import corsMiddleware from "./config/cors";
+import path from "path";
+import upload from "./middleware/multer";
+import cloudinary from "./config/cloudinary";
 
 connection.connect();
 
@@ -22,16 +25,16 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // Initialize i18n for localization
-
 app.use(i18n.init);
 app.use(localeMiddleware);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
+// Configure Cloudinary Storage
+
 app.use("/v1/api", validateObjectId("_id"), rootRoutes);
 
 //Global Error handling middleware
 app.use(errorMiddleware);
-
 // Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

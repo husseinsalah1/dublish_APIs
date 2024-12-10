@@ -1,12 +1,10 @@
 import i18n from "../config/i18nConfig";
+import { BadRequestException } from "../exceptions/bad-requests";
 import { NotFoundException } from "../exceptions/not-found-exception";
 import { ErrorCodes } from "../exceptions/root";
 import { ICourse } from "../models/Course";
 import CourseRepository from "../repositories/CourseRepository";
-import {
-  convertFieldsToLowerCase,
-  FormObject,
-} from "../utils/custom-functions";
+import { convertFieldsToLowerCase, FormObject } from "../utils/custom-functions";
 import BaseService from "./BaseService";
 
 class CourseService extends BaseService<ICourse> {
@@ -34,13 +32,11 @@ class CourseService extends BaseService<ICourse> {
   async createCourse(data: Partial<ICourse>, locale: string) {
     data = convertFieldsToLowerCase(data as FormObject, ["name.en"]);
     const { name } = data;
+
     const existingCourse = await this.findCourseByName("name.en", name!.en);
 
     if (existingCourse) {
-      throw new NotFoundException(
-        i18n.__("errors.duplicate"),
-        ErrorCodes.DUPLICATE
-      );
+      throw new BadRequestException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
     }
 
     const createOperation = await this.create(data);
@@ -70,10 +66,7 @@ class CourseService extends BaseService<ICourse> {
     if (name) {
       const existingAdmin = await this.findCourseByName("name.en", name.en);
       if (existingAdmin && existingAdmin._id.toString() !== _id) {
-        throw new NotFoundException(
-          i18n.__("errors.duplicate"),
-          ErrorCodes.DUPLICATE
-        );
+        throw new NotFoundException(i18n.__(" duplicate"), ErrorCodes.DUPLICATE);
       }
     }
 

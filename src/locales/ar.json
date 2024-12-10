@@ -1,17 +1,15 @@
 {
-  "errors": {
-    "notFound": "غير موجود",
-    "invalidPassword": "كلمة مرور غير صحيحة",
-    "duplicate": "مكرر",
-    "unauthorized": "غير مصرح",
-    "invalidToken": "رمز غير صحيح",
-    "InvalidPermission": "صلاحية غير صحيحة",
-    "referenceIdNotFound": "معرف المرجع غير موجود",
-    "invalidReferenceId": "معرف المرجع غير صحيح",
-    "internalServerError": "خطأ داخلي في الخادم",
-    "validationFieldsError": "خطأ في الحقول المدخلة",
-    "invalidObjectId": "معرف الكائن غير صحيح"
-  },
+  "notFound": "غير موجود",
+  "invalidPassword": "كلمة مرور غير صحيحة",
+  "duplicate": "مكرر",
+  "unauthorized": "غير مصرح",
+  "invalidToken": "رمز غير صحيح",
+  "InvalidPermission": "صلاحية غير صحيحة",
+  "referenceIdNotFound": "معرف المرجع غير موجود",
+  "invalidReferenceId": "معرف المرجع غير صحيح",
+  "internalServerError": "خطأ داخلي في الخادم",
+  "validationFieldsError": "خطأ في الحقول المدخلة",
+  "invalidObjectId": "معرف الكائن غير صحيح",
   "validation": {
     "string_base": "{{field}} يجب أن يكون نصًا.",
     "string_pattern_base": "{{field}} يحتوي على أحرف غير صالحة.",

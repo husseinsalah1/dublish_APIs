@@ -8,8 +8,6 @@ i18n.configure({
   defaultLocale: "en",
   objectNotation: true,
   autoReload: true,
-  updateFiles: false,
-  syncFiles: false,
 });
 
 export default i18n;

@@ -40,11 +40,11 @@ class AdminService extends BaseService<IAdmin> {
   async login(email: string, password: string, locale: string) {
     const admin = await this.findByEmail(email);
     if (!admin) {
-      throw new NotFoundException(i18n.__("errors.notFound"), ErrorCodes.NOT_FOUND);
+      throw new NotFoundException(i18n.__("notFound"), ErrorCodes.NOT_FOUND);
     }
     const isMatch = await this.comparePassword(password, admin.password);
     if (!isMatch) {
-      throw new NotFoundException(i18n.__("errors.invalidPassword"), ErrorCodes.INVALID_PASSWORD);
+      throw new NotFoundException(i18n.__("invalidPassword"), ErrorCodes.INVALID_PASSWORD);
     }
 
     const token = await admin.generateAuthToken();
@@ -72,10 +72,12 @@ class AdminService extends BaseService<IAdmin> {
    */
   async createAdmin(data: Partial<IAdmin>, locale: string) {
     const { email, username } = data;
-    const existingAdmin = await this.findByEmail(email as string);
-    const existingUsername = await this.adminRepository.findByUsername(username as string);
+
+    const existingAdmin = await this.findByEmail(email?.toLocaleLowerCase() as string);
+    console.log(existingAdmin);
+    const existingUsername = await this.adminRepository.findByUsername(username?.toLocaleLowerCase() as string);
     if (existingAdmin || existingUsername) {
-      throw new NotFoundException(i18n.__("errors.duplicate"), ErrorCodes.DUPLICATE);
+      throw new NotFoundException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
     }
 
     data = convertFieldsToLowerCase(data as FormObject, ["email", "username"]);
@@ -116,14 +118,14 @@ class AdminService extends BaseService<IAdmin> {
     if (email) {
       const existingAdmin = await this.findByEmail(email as string);
       if (existingAdmin && existingAdmin._id.toString() !== _id) {
-        throw new NotFoundException(i18n.__("errors.duplicate"), ErrorCodes.DUPLICATE);
+        throw new NotFoundException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
       }
     }
 
     if (username) {
       const existingUsername = await this.adminRepository.findByUsername(username as string);
       if (existingUsername && existingUsername._id.toString() !== _id) {
-        throw new NotFoundException(i18n.__("errors.duplicate"), ErrorCodes.DUPLICATE);
+        throw new NotFoundException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
       }
     }
 
