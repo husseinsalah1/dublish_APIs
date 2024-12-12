@@ -111,7 +111,15 @@ class AdminService extends BaseService<IAdmin> {
    * An object containing a success flag, HTTP status code, and the updated admin user details.
    * @throws {NotFoundException} Throws an error if a different admin user with the same email or username already exists.
    */
-  async updateAdmin(_id: string, data: Partial<IAdmin>, locale: string) {
+  async updateAdmin(
+    _id: string,
+    data: Partial<IAdmin>,
+    locale: string,
+    populateObject: { path: string; select: string } = {
+      path: "",
+      select: "",
+    }
+  ) {
     data = convertFieldsToLowerCase(data as FormObject, ["email", "username"]);
     const { email, username } = data;
 
@@ -129,7 +137,7 @@ class AdminService extends BaseService<IAdmin> {
       }
     }
 
-    const updateOperation = await this.update(_id, data);
+    const updateOperation = await this.update(_id, data, populateObject);
 
     return {
       success: true,

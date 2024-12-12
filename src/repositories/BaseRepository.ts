@@ -21,11 +21,19 @@ class BaseRepository<T extends Document> {
     return this.model.findOne(findObject).exec();
   }
 
-  async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}) {
+  async findAll(
+    findObject: FilterQuery<T> = {},
+    options: FindAllOptions = {},
+    populateObject: { path: string; select: string } = {
+      path: "",
+      select: "",
+    }
+  ) {
     const { selectionObject = {}, sortObject = {}, pageNumber = 1, limitNumber = 10 } = options;
 
     const results = await this.model
       .find(findObject)
+      .populate(populateObject)
       .lean()
       .sort(sortObject as string | { [key: string]: SortOrder | { $meta: any } } | [string, SortOrder][] | null | undefined)
       .select(selectionObject)
@@ -35,8 +43,15 @@ class BaseRepository<T extends Document> {
     return results;
   }
 
-  async update(findObject: FilterQuery<T>, updatedData: UpdateQuery<T>): Promise<T | null> {
-    return this.model.findOneAndUpdate(findObject, updatedData, { new: true }).exec();
+  async update(
+    findObject: FilterQuery<T>,
+    updatedData: UpdateQuery<T>,
+    populateObject: { path: string; select: string } = {
+      path: "",
+      select: "",
+    }
+  ) {
+    return this.model.findOneAndUpdate(findObject, updatedData, { new: true }).populate(populateObject).exec();
   }
 
   async delete(findObject: FilterQuery<T>): Promise<boolean> {

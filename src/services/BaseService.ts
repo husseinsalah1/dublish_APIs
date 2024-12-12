@@ -14,8 +14,8 @@ class BaseService<T extends Document> {
     return this.repository.create(data);
   }
 
-  async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}) {
-    const resultArray = await this.repository.findAll(findObject, options);
+  async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}, populateObject: { path: string; select: string } = { path: "", select: "" }) {
+    const resultArray = await this.repository.findAll(findObject, options, populateObject);
     const count = await this.repository.count(findObject);
     console.log(count);
     return {
@@ -38,8 +38,8 @@ class BaseService<T extends Document> {
     };
   }
 
-  async update(_id: string, updatedData: UpdateQuery<T>): Promise<T | null> {
-    return this.repository.update({ _id }, updatedData);
+  async update(_id: string, updatedData: UpdateQuery<T>, populateObject: { path: string; select: string } = { path: "", select: "" }) {
+    return this.repository.update({ _id }, updatedData, populateObject);
   }
 
   async delete(_id: string) {

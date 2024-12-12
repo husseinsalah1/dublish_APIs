@@ -131,7 +131,7 @@ const updateAdminValidation = {
       }),
   })
     .required()
-    .unknown(false),
+    .unknown(true),
 };
 
 export { createAdminValidation, updateAdminValidation };

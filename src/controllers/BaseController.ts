@@ -24,7 +24,7 @@ abstract class BaseController<T extends Document> {
       pageNumber,
       limitNumber,
     };
-    const result = (await this.service.findAll(findObject, options)) as any;
+    const result = (await this.service.findAll(findObject, options, { path: "permissions", select: "" })) as any;
 
     return res.status(result.code).json(result);
   };

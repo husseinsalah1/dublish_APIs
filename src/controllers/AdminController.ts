@@ -26,7 +26,7 @@ class AdminController extends BaseController<IAdmin> {
   updateAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const locale = req.locale;
     console.log(req.body);
-    const result = await (this.service as AdminService).updateAdmin(req.query._id as string, req.body, locale);
+    const result = await (this.service as AdminService).updateAdmin(req.query._id as string, req.body, locale, { path: "permissions", select: "" });
     res.status(result.code).json(result);
   };
 }
