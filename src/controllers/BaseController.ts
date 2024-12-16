@@ -12,21 +12,23 @@ abstract class BaseController<T extends Document> {
     this.service = service;
   }
 
-  findAll = async (req: Request, res: Response) => {
-    const findObject = req.query.findObject ? JSON.parse(req.query.findObject as string) : {};
-    const selectionObject = req.query.selectionObject ? JSON.parse(req.query.selectionObject as string) : {};
-    const sortObject = req.query.sortObject ? JSON.parse(req.query.sortObject as string) : {};
-    const pageNumber = parseInt(req.query.page as string, 10) || 1;
-    const limitNumber = parseInt(req.query.limit as string, 10) || 10;
-    const options = {
-      selectionObject,
-      sortObject,
-      pageNumber,
-      limitNumber,
-    };
-    const result = (await this.service.findAll(findObject, options, { path: "permissions", select: "" })) as any;
+  findAll = (populateObject: any) => {
+    return async (req: Request, res: Response) => {
+      const findObject = req.query.findObject ? JSON.parse(req.query.findObject as string) : {};
+      const selectionObject = req.query.selectionObject ? JSON.parse(req.query.selectionObject as string) : {};
+      const sortObject = req.query.sortObject ? JSON.parse(req.query.sortObject as string) : {};
+      const pageNumber = parseInt(req.query.page as string, 10) || 1;
+      const limitNumber = parseInt(req.query.limit as string, 10) || 10;
+      const options = {
+        selectionObject,
+        sortObject,
+        pageNumber,
+        limitNumber,
+      };
+      const result = (await this.service.findAll(findObject, options, populateObject)) as any;
 
-    return res.status(result.code).json(result);
+      return res.status(result.code).json(result);
+    };
   };
 
   findOne = async (req: Request, res: Response, next: NextFunction) => {

@@ -70,7 +70,7 @@ class CourseService extends BaseService<ICourse> {
       }
     }
 
-    const updateOperation = await this.update(_id, data);
+    const updateOperation = await this.update(_id, data, { path: "createdBy", select: "" });
     return {
       success: true,
       code: 200,

@@ -9,10 +9,8 @@ const studentController = new StudentController(studentService);
 const router = express.Router();
 
 router.post("/create", customErrorHandler(studentController.createStudent));
-router
-  .route("/update")
-  .put(customErrorHandler(studentController.updateStudent));
-
-router.route("/list").get(customErrorHandler(studentController.findAll));
+router.route("/update").put(customErrorHandler(studentController.updateStudent));
+router.route("/list").get(customErrorHandler(studentController.findAll({ path: "", select: "" })));
 router.route("/get").get(customErrorHandler(studentController.findOne));
+router.delete("/delete", customErrorHandler(studentController.delete));
 export default router;

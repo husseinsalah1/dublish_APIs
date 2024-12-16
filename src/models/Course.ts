@@ -75,6 +75,7 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse>({
       },
     },
   },
+
   createdBy: { type: Schema.Types.ObjectId, ref: "admins", required: true },
   creationDate: { type: Date, default: Date.now },
 });

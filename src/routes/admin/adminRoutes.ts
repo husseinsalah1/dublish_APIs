@@ -15,7 +15,7 @@ const adminController = new AdminController(adminService);
 router.post("/create", [validationSchema(createAdminValidation), checkReference(roleModel, "permissions")], customErrorHandler(adminController.createAdmin));
 
 router.get("/get", customErrorHandler(adminController.findOne));
-router.get("/list", customErrorHandler(adminController.findAll));
+router.get("/list", customErrorHandler(adminController.findAll({ path: "permissions", select: "" })));
 router.put("/update", [validationSchema(updateAdminValidation)], customErrorHandler(adminController.updateAdmin));
 router.delete("/delete", customErrorHandler(adminController.delete));
 

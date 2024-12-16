@@ -10,6 +10,6 @@ const roleController = new RoleController(roleService);
 
 router.post("/create", customErrorHandler(roleController.createRole));
 router.get("/get", customErrorHandler(roleController.findOne));
-router.get("/list", customErrorHandler(roleController.findAll));
+router.get("/list", customErrorHandler(roleController.findAll({ path: "", select: "" })));
 router.put("/update", customErrorHandler(roleController.updateRole));
 export default router;

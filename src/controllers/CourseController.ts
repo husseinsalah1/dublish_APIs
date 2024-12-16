@@ -43,11 +43,15 @@ class CourseController extends BaseController<ICourse> {
         formObject[key] = Number(formObject[key]);
       }
     }
+
     formObject.name = JSON.parse(formObject.name);
     formObject.description = JSON.parse(formObject.description);
     formObject.about = JSON.parse(formObject.about);
     formObject.duration = JSON.parse(formObject.duration);
     formObject.category = JSON.parse(formObject.category);
+    formObject.hours = JSON.parse(formObject.hours);
+    formObject.classes = JSON.parse(formObject.classes);
+    formObject.price = JSON.parse(formObject.price);
     formObject.createdBy = req.tokenData._id;
 
     const result = await (this.service as CourseService).createCourse(
@@ -61,7 +65,33 @@ class CourseController extends BaseController<ICourse> {
   };
 
   updateCourse = async (req: Request & { tokenData: { _id: string } }, res: Response, next: NextFunction) => {
-    const result = await (this.service as CourseService).updateCourse(req.query._id as string, req.body, req.locale);
+    const { isHasOffer } = req.body;
+    if (isHasOffer === "false" || isHasOffer === false) {
+      console.log("isHasOffer", isHasOffer);
+      req.body.offerPercentage = 0;
+      req.body.offerDuration = { start: null, end: null };
+    }
+    let filePath: string;
+    let uploadResult;
+    let updatedData = {
+      ...req.body,
+    };
+
+    if (req.file) {
+      filePath = req.file.path; // Path of the uploaded image on the server
+      uploadResult = await cloudinary.uploader.upload(filePath, {
+        public_id: req.file.originalname.split(".")[0], // Use the file name as public ID
+      });
+      updatedData = {
+        ...req.body,
+        image: {
+          url: uploadResult?.url || "",
+          publicId: uploadResult?.public_id || "",
+        },
+      };
+    }
+
+    const result = await (this.service as CourseService).updateCourse(req.query._id as string, updatedData, req.locale);
     res.status(result.code).json(result);
   };
 }

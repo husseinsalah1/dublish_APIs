@@ -33,7 +33,10 @@ class BaseRepository<T extends Document> {
 
     const results = await this.model
       .find(findObject)
-      .populate(populateObject)
+      .populate({
+        ...populateObject,
+        strictPopulate: false,
+      })
       .lean()
       .sort(sortObject as string | { [key: string]: SortOrder | { $meta: any } } | [string, SortOrder][] | null | undefined)
       .select(selectionObject)
@@ -51,7 +54,10 @@ class BaseRepository<T extends Document> {
       select: "",
     }
   ) {
-    return this.model.findOneAndUpdate(findObject, updatedData, { new: true }).populate(populateObject).exec();
+    return this.model
+      .findOneAndUpdate(findObject, updatedData, { new: true })
+      .populate({ ...populateObject, strictPopulate: false })
+      .exec();
   }
 
   async delete(findObject: FilterQuery<T>): Promise<boolean> {
