@@ -3,9 +3,16 @@ interface MultiLangName {
   en: string;
   ar: string;
 }
+
+export enum CourseType {
+  OFFLINE = "offline",
+  ONLINE = "online",
+}
+
 export interface ICourse extends Document {
   name: MultiLangName;
   description: MultiLangName;
+  type: string;
   about: {
     en: string[];
     ar: string[];
@@ -29,15 +36,20 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse>({
     en: { type: String, required: true },
     ar: { type: String, required: true },
   },
+
   description: {
     en: { type: String, required: true },
     ar: { type: String, required: true },
+  },
+  type: {
+    type: String,
+    enum: Object.values(CourseType),
+    required: true,
   },
   about: {
     en: [{ type: String, required: true }],
     ar: [{ type: String, required: true }],
   },
-
   image: { type: Object },
   category: {
     en: { type: String, required: true },

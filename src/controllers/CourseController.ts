@@ -17,23 +17,22 @@ class CourseController extends BaseController<ICourse> {
     let filePath: string;
     let uploadResult;
     if (req.file) {
-      filePath = req.file.path; // Path of the uploaded image on the server
+      filePath = req.file.path;
       uploadResult = await cloudinary.uploader.upload(filePath, {
-        public_id: req.file.originalname.split(".")[0], // Use the file name as public ID
+        public_id: req.file.originalname.split(".")[0],
       });
     }
-
     const formObject = {
       ...req.body,
       image: {
         url: uploadResult?.url || "",
         publicId: uploadResult?.public_id || "",
       },
+      createdBy: req.tokenData._id,
     };
-    let image = formObject.image; // Store the image field from the formObject
-    delete formObject.image; // Remove the image field from the formObject
+    let image = formObject.image;
+    delete formObject.image;
 
-    // Parsed all formObject values
     for (const key in formObject) {
       if (formObject[key] === "true") {
         formObject[key] = true;
@@ -44,15 +43,14 @@ class CourseController extends BaseController<ICourse> {
       }
     }
 
-    formObject.name = JSON.parse(formObject.name);
-    formObject.description = JSON.parse(formObject.description);
-    formObject.about = JSON.parse(formObject.about);
-    formObject.duration = JSON.parse(formObject.duration);
-    formObject.category = JSON.parse(formObject.category);
-    formObject.hours = JSON.parse(formObject.hours);
-    formObject.classes = JSON.parse(formObject.classes);
-    formObject.price = JSON.parse(formObject.price);
-    formObject.createdBy = req.tokenData._id;
+    formObject.name = typeof formObject.name === "string" ? JSON.parse(formObject.name) : formObject.name;
+    formObject.description = typeof formObject.description === "string" ? JSON.parse(formObject.description) : formObject.description;
+    formObject.about = typeof formObject.about === "string" ? JSON.parse(formObject.about) : formObject.about;
+    formObject.duration = typeof formObject.duration === "string" ? JSON.parse(formObject.duration) : formObject.duration;
+    formObject.category = typeof formObject.category === "string" ? JSON.parse(formObject.category) : formObject.category;
+    formObject.hours = typeof formObject.hours === "string" ? JSON.parse(formObject.hours) : formObject.hours;
+    formObject.classes = typeof formObject.classes === "string" ? JSON.parse(formObject.classes) : formObject.classes;
+    formObject.price = typeof formObject.price === "string" ? JSON.parse(formObject.price) : formObject.price;
 
     const result = await (this.service as CourseService).createCourse(
       {
@@ -78,9 +76,9 @@ class CourseController extends BaseController<ICourse> {
     };
 
     if (req.file) {
-      filePath = req.file.path; // Path of the uploaded image on the server
+      filePath = req.file.path;
       uploadResult = await cloudinary.uploader.upload(filePath, {
-        public_id: req.file.originalname.split(".")[0], // Use the file name as public ID
+        public_id: req.file.originalname.split(".")[0],
       });
       updatedData = {
         ...req.body,

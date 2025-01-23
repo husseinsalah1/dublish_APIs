@@ -1,9 +1,9 @@
 import { Model, Document, FilterQuery, UpdateQuery, SortOrder } from "mongoose";
 export interface FindAllOptions {
-  selectionObject?: string | string[] | Record<string, number | boolean | object>; // The fields to select
-  sortObject?: object; // The sort criteria
-  pageNumber?: number; // The page number for pagination
-  limitNumber?: number; // The limit of documents per page
+  selectionObject?: string | string[] | Record<string, number | boolean | object>;
+  sortObject?: object;
+  pageNumber?: number;
+  limitNumber?: number;
 }
 class BaseRepository<T extends Document> {
   private model: Model<T>;

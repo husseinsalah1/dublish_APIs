@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import BaseService from "../services/BaseService";
-import { Document } from "mongoose";
+import { Document, FilterQuery } from "mongoose";
 import { NotFoundException } from "../exceptions/not-found-exception";
 import i18n from "../config/i18nConfig";
 import { ErrorCodes } from "../exceptions/root";
@@ -14,9 +14,9 @@ abstract class BaseController<T extends Document> {
 
   findAll = (populateObject: any) => {
     return async (req: Request, res: Response) => {
-      const findObject = req.query.findObject ? JSON.parse(req.query.findObject as string) : {};
-      const selectionObject = req.query.selectionObject ? JSON.parse(req.query.selectionObject as string) : {};
-      const sortObject = req.query.sortObject ? JSON.parse(req.query.sortObject as string) : {};
+      const filterObject = req.query as FilterQuery<T>;
+      const selectionObject = { password: 0 };
+      const sortObject = { createdAt: req.query.createdAt || -1 };
       const pageNumber = parseInt(req.query.page as string, 10) || 1;
       const limitNumber = parseInt(req.query.limit as string, 10) || 10;
       const options = {
@@ -25,7 +25,9 @@ abstract class BaseController<T extends Document> {
         pageNumber,
         limitNumber,
       };
-      const result = (await this.service.findAll(findObject, options, populateObject)) as any;
+      delete filterObject.page;
+      delete filterObject.limit;
+      const result = (await this.service.findAll(filterObject, options, populateObject)) as any;
 
       return res.status(result.code).json(result);
     };

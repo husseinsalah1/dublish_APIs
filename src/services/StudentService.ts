@@ -37,11 +37,11 @@ class StudentService extends BaseService<IStudent> {
   async login(email: string, password: string, locale: string) {
     const student = await this.findStudentByEmail(email);
     if (!student) {
-      throw new NotFoundException(i18n.__(" notFound"), ErrorCodes.NOT_FOUND);
+      throw new NotFoundException(i18n.__("notFound"), ErrorCodes.NOT_FOUND);
     }
     const isMatch = await this.comparePassword(password, student.password);
     if (!isMatch) {
-      throw new NotFoundException(i18n.__(" invalidPassword"), ErrorCodes.INVALID_PASSWORD);
+      throw new NotFoundException(i18n.__("invalidPassword"), ErrorCodes.INVALID_PASSWORD);
     }
 
     const token = await student.generateAuthToken();
