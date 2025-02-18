@@ -3,6 +3,7 @@ import AdminController from "../../controllers/AdminController";
 import customErrorHandler from "../../error-handler";
 import AdminService from "../../services/AdminService";
 import AdminRepository from "../../repositories/AdminRepository";
+import { swaggerDefinitions } from "./../../docs/swagger-docs";
 
 const router = express.Router();
 

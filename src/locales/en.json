@@ -20,7 +20,5 @@
     "string_pattern_phone": "The phone number format is invalid.",
     "any_only": "The {{field}} must be one of the predefined values."
   },
-  "messages": {
-    "deleted": "Deleted Successfully"
-  }
+  "deleted": "Deleted Successfully"
 }

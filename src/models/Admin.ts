@@ -83,7 +83,7 @@ adminSchema.methods.generateAuthToken = async function () {
     name: user.name,
     email: user.email,
   };
-  const token = jwt.sign(payload, JWT_SECRET);
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "2h" });
   user.token = token;
   await user.save();
   return token;

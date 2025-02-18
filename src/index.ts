@@ -10,14 +10,17 @@ import localeMiddleware from "./middleware/localeMiddleware";
 import validateObjectId from "./middleware/validateObjectId";
 import corsMiddleware from "./config/cors";
 import path from "path";
-import upload from "./middleware/multer";
-import cloudinary from "./config/cloudinary";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import { swaggerOptions } from "./config/swagger";
 
 connection.connect();
 
 const app: Express = express();
 // Constants
 const PORT = process.env.PORT || 3000;
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middlewares
 app.use(corsMiddleware);

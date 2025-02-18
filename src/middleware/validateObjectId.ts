@@ -17,7 +17,7 @@ const validateObjectId = (idPath: string = "_id") => {
     const _id: string | undefined = req.params[idPath] || req.body[idPath] || (req.query[idPath] as string | undefined);
 
     if (_id && !mongoose.Types.ObjectId.isValid(_id)) {
-      return next(new BadRequestException(i18n.__("errors.invalidObjectId"), ErrorCodes.INVALID_OBJECT_ID));
+      return next(new BadRequestException(i18n.__("invalidObjectId"), ErrorCodes.INVALID_OBJECT_ID));
     }
 
     next();

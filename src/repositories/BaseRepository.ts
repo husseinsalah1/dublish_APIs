@@ -1,12 +1,8 @@
 import { Model, Document, FilterQuery, UpdateQuery, SortOrder } from "mongoose";
-export interface FindAllOptions {
-  selectionObject?: string | string[] | Record<string, number | boolean | object>;
-  sortObject?: object;
-  pageNumber?: number;
-  limitNumber?: number;
-}
+import FindAllOptions from "../interfaces/FindAllOptions";
+
 class BaseRepository<T extends Document> {
-  private model: Model<T>;
+  private readonly model: Model<T>;
 
   constructor(model: Model<T>) {
     this.model = model;
@@ -38,7 +34,7 @@ class BaseRepository<T extends Document> {
         strictPopulate: false,
       })
       .lean()
-      .sort(sortObject as string | { [key: string]: SortOrder | { $meta: any } } | [string, SortOrder][] | null | undefined)
+      .sort(sortObject as string | { [key: string]: SortOrder })
       .select(selectionObject)
       .limit(limitNumber)
       .skip((pageNumber - 1) * limitNumber);

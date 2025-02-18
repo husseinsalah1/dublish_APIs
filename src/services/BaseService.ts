@@ -1,7 +1,9 @@
 import { Document, FilterQuery, UpdateQuery } from "mongoose";
-import BaseRepository, { FindAllOptions } from "../repositories/BaseRepository";
+import BaseRepository from "../repositories/BaseRepository";
 import i18n from "../config/i18nConfig";
 import bcrypt from "bcrypt";
+import FindAllOptions from "../interfaces/FindAllOptions";
+import { customLog } from "../utils/custom-functions";
 
 class BaseService<T extends Document> {
   private repository: BaseRepository<T>;
@@ -17,7 +19,7 @@ class BaseService<T extends Document> {
   async findAll(findObject: FilterQuery<T> = {}, options: FindAllOptions = {}, populateObject: { path: string; select: string } = { path: "", select: "" }) {
     const resultArray = await this.repository.findAll(findObject, options, populateObject);
     const count = await this.repository.count(findObject);
-    console.log(count);
+    customLog("List of items retrieved successfully");
     return {
       success: true,
       code: 200,
@@ -29,8 +31,10 @@ class BaseService<T extends Document> {
   async findOne(findObject: FilterQuery<T>) {
     const data = await this.repository.findOne(findObject);
     if (!data) {
+      customLog("Item not found");
       return null;
     }
+    customLog("Item retrieved successfully");
     return {
       success: true,
       code: 200,

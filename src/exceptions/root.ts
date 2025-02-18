@@ -1,12 +1,7 @@
 // message, status code, error codes, and error
 
 class HttpException extends Error {
-  constructor(
-    public message: string,
-    public errorCode: ErrorCodes,
-    public statusCode: number,
-    public errors: any
-  ) {
+  constructor(public message: string, public errorCode: ErrorCodes, public statusCode: number, public errors: any) {
     super(message);
   }
 }

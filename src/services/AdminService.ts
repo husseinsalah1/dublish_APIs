@@ -5,55 +5,48 @@ import bcrypt from "bcrypt";
 import { NotFoundException } from "../exceptions/not-found-exception";
 import { ErrorCodes } from "../exceptions/root";
 import i18n from "../config/i18nConfig";
-import { convertFieldsToLowerCase, FormObject } from "../utils/custom-functions";
-
+import { convertFieldsToLowerCase, customLog, FormObject } from "../utils/custom-functions";
+import { BadRequestException } from "../exceptions/bad-requests";
+import LoggerService from "./LoggerService";
 // AdminService class extending BaseService
 class AdminService extends BaseService<IAdmin> {
   private adminRepository: AdminRepository;
+  private loggerService = new LoggerService("admin");
 
   constructor(adminRepository: AdminRepository) {
     super(adminRepository);
     this.adminRepository = adminRepository;
   }
 
-  // ===================== Helper Methods ===================== //
-  async findByEmail(email: string): Promise<IAdmin | null> {
-    return this.adminRepository.findByEmail(email);
-  }
-
-  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
-    const isMatch = await bcrypt.compare(password, hashedPassword);
-    return isMatch;
-  }
-
   // ===================== Authentication ===================== //
   /**
-   * Authenticates an admin user by email and password.
+   * Logs in an admin user with the provided email and password.
    *
    * @param {string} email - The email address of the admin user attempting to log in.
    * @param {string} password - The plain text password provided by the admin user.
    * @param {string} locale - The locale used to localize the admin user's name in the response.
-   * @returns {Promise<{ success: boolean; code: number; result: object; token: string }>}
-   * An object containing a success flag, HTTP status code, admin user details, and authentication token.
+   * @returns {Promise<{ success: boolean; code: number; result: object; token: string }>} An object containing a success flag, HTTP status code, the admin user's details, and an authentication token.
    * @throws {NotFoundException} Throws an error if the admin user is not found or if the password is invalid.
-   */
+   *
+   **/
   async login(email: string, password: string, locale: string) {
     const admin = await this.findByEmail(email);
     if (!admin) {
+      this.loggerService.error(`Admin ${email} not found`);
       throw new NotFoundException(i18n.__("notFound"), ErrorCodes.NOT_FOUND);
     }
     const isMatch = await this.comparePassword(password, admin.password);
     if (!isMatch) {
+      this.loggerService.error(`Invalid password for admin ${email}`);
       throw new NotFoundException(i18n.__("invalidPassword"), ErrorCodes.INVALID_PASSWORD);
     }
-
     const token = await admin.generateAuthToken();
+    this.loggerService.info(`Admin ${admin.email} logged in successfully`);
     return {
       success: true,
       code: 200,
       result: {
         ...admin.toJSON(),
-        name: admin.name[locale],
       },
       token,
     };
@@ -74,17 +67,19 @@ class AdminService extends BaseService<IAdmin> {
     const { email, username } = data;
 
     const existingAdmin = await this.findByEmail(email?.toLocaleLowerCase() as string);
-    console.log(existingAdmin);
     const existingUsername = await this.adminRepository.findByUsername(username?.toLocaleLowerCase() as string);
+
     if (existingAdmin || existingUsername) {
-      throw new NotFoundException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
+      customLog("Admin already exists");
+      throw new BadRequestException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
     }
 
     data = convertFieldsToLowerCase(data as FormObject, ["email", "username"]);
     const createOperation = await this.create(data);
+    customLog("Admin created successfully");
     return {
       success: true,
-      code: 200,
+      code: 201,
       result: {
         ...createOperation.toJSON(),
         name: createOperation.name[locale],
@@ -114,7 +109,6 @@ class AdminService extends BaseService<IAdmin> {
   async updateAdmin(
     _id: string,
     data: Partial<IAdmin>,
-    locale: string,
     populateObject: { path: string; select: string } = {
       path: "",
       select: "",
@@ -122,28 +116,41 @@ class AdminService extends BaseService<IAdmin> {
   ) {
     data = convertFieldsToLowerCase(data as FormObject, ["email", "username"]);
     const { email, username } = data;
-
     if (email) {
       const existingAdmin = await this.findByEmail(email as string);
       if (existingAdmin && existingAdmin._id.toString() !== _id) {
-        throw new NotFoundException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
+        customLog("Admin already exists");
+        throw new BadRequestException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
       }
     }
 
     if (username) {
       const existingUsername = await this.adminRepository.findByUsername(username as string);
       if (existingUsername && existingUsername._id.toString() !== _id) {
-        throw new NotFoundException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
+        customLog("Admin already exists");
+        throw new BadRequestException(i18n.__("duplicate"), ErrorCodes.DUPLICATE);
       }
     }
-
+    console.log("data", data);
     const updateOperation = await this.update(_id, data, populateObject);
-
+    if (!updateOperation) {
+      throw new NotFoundException(i18n.__("notFound"), ErrorCodes.NOT_FOUND);
+    }
     return {
       success: true,
       code: 200,
       result: updateOperation,
     };
+  }
+
+  // ===================== Helper Methods ===================== //
+  async findByEmail(email: string): Promise<IAdmin | null> {
+    return this.adminRepository.findByEmail(email);
+  }
+
+  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    return isMatch;
   }
 }
 
